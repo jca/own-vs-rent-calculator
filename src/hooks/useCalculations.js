@@ -210,8 +210,8 @@ const validateParameters = (params) => {
     errors.investmentStartBalance = "Investment start balance cannot be negative";
   }
 
-  if (params.monthlyInvestment < 0) {
-    errors.monthlyInvestment = "Monthly investment cannot be negative";
+  if (params.monthlyBudget < 0) {
+    errors.monthlyBudget = "Monthly budget cannot be negative";
   }
 
   // Home appreciation rate validation

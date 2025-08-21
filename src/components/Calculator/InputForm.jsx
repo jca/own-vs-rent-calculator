@@ -332,11 +332,12 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
   <div className="form-section">
     <h3>Investment Strategy</h3>
     <div className="section-note">
-      <p>💡 <strong>Investment Strategy Comparison:</strong></p>
+      <p>💡 <strong>Budget Allocation Strategy:</strong></p>
       <ul>
-        <li><strong>If you rent:</strong> Invest full starting balance + monthly investment contribution</li>
-        <li><strong>If you own:</strong> Invest starting balance minus down payment + monthly investment + rental income</li>
+        <li><strong>If you rent:</strong> Budget - rent = investment amount</li>
+        <li><strong>If you own:</strong> Budget - housing costs + rental income = investment amount</li>
       </ul>
+      <p>Same monthly budget, different allocation between housing and investing.</p>
     </div>
     
     <div className="input-grid">
@@ -358,21 +359,21 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
       </div>
 
       <div className="input-group">
-        <label htmlFor="monthlyInvestment">Monthly Investment Contribution</label>
+        <label htmlFor="monthlyBudget">Monthly Budget Allocation</label>
         <div className="input-wrapper">
           <span className="input-prefix">$</span>
           <input
             type="number"
-            id="monthlyInvestment"
-            value={parameters.monthlyInvestment || ''}
-            onChange={(e) => onInputChange('monthlyInvestment', e.target.value)}
-            placeholder="500"
+            id="monthlyBudget"
+            value={parameters.monthlyBudget || ''}
+            onChange={(e) => onInputChange('monthlyBudget', e.target.value)}
+            placeholder="3000"
             min="0"
             step="50"
           />
           <span className="input-suffix">/month</span>
         </div>
-        <small className="input-help">Additional monthly amount you can invest regardless of housing choice</small>
+        <small className="input-help">Total monthly budget for housing + investing (allocated differently in each scenario)</small>
       </div>
 
       <div className="input-group">
@@ -401,7 +402,8 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
           <h5>🏠 Own Scenario</h5>
           <ul>
             <li>Build home equity through mortgage payments</li>
-            <li>Invest your starting balance + monthly contributions</li>
+            <li>Budget allocation: housing costs → mortgage, rest → investments</li>
+            <li>Add rental income to investments</li>
             <li>Net worth = Home equity + Investments</li>
           </ul>
         </div>
@@ -409,8 +411,8 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
           <h5>🏠 Rent + Invest Scenario</h5>
           <ul>
             <li>Keep full starting investment balance</li>
-            <li>Invest your monthly contributions</li>
-            <li>Independent of ownership costs</li>
+            <li>Budget allocation: rent → housing, rest → investments</li>
+            <li>No home equity building</li>
             <li>Net worth = Total investments</li>
           </ul>
         </div>

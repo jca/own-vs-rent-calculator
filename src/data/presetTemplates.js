@@ -21,7 +21,7 @@ export const presetTemplates = {
       monthlyRent: 2000,
       rentIncreaseRate: 3.0,
       investmentStartBalance: 50000, // Increased to cover $40k down payment + emergency fund
-      monthlyInvestment: 500,
+      monthlyBudget: 3000, // Budget allocation for housing + investing
       investmentReturn: 7.0,
       timeHorizon: 30
     }
@@ -45,7 +45,7 @@ export const presetTemplates = {
       monthlyRent: 4000,
       rentIncreaseRate: 4.0,
       investmentStartBalance: 200000, // Increased to cover $160k down payment + buffer
-      monthlyInvestment: 1500,
+      monthlyBudget: 6000, // Budget allocation for housing + investing
       investmentReturn: 8.0,
       timeHorizon: 25
     }
@@ -69,7 +69,7 @@ export const presetTemplates = {
       monthlyRent: 2500,
       rentIncreaseRate: 2.5,
       investmentStartBalance: 120000, // Increased to cover $100k down payment + buffer
-      monthlyInvestment: 1000,
+      monthlyBudget: 4000, // Budget allocation for housing + investing
       investmentReturn: 7.5,
       timeHorizon: 35
     }
@@ -93,7 +93,7 @@ export const presetTemplates = {
       monthlyRent: 1500,
       rentIncreaseRate: 3.5,
       investmentStartBalance: 20000, // Increased to cover $15k down payment + buffer
-      monthlyInvestment: 300,
+      monthlyBudget: 2200, // Budget allocation for housing + investing
       investmentReturn: 8.5,
       timeHorizon: 20
     }
@@ -117,7 +117,7 @@ export const presetTemplates = {
       monthlyRent: 3000,
       rentIncreaseRate: 3.2,
       investmentStartBalance: 110000, // Increased to cover $90k down payment + buffer
-      monthlyInvestment: 800,
+      monthlyBudget: 4200, // Budget allocation for housing + investing
       investmentReturn: 7.2,
       timeHorizon: 30
     }
@@ -159,7 +159,7 @@ export const defaultParameters = {
   monthlyRent: 2500,
   rentIncreaseRate: 3.0,
   investmentStartBalance: 120000, // Increased to cover $100k down payment + buffer
-  monthlyInvestment: 500,
+  monthlyBudget: 3500, // Budget allocation for housing + investing
   investmentReturn: 7.0,
   timeHorizon: 30
 };

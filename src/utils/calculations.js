@@ -161,7 +161,7 @@ export const calculateScenario = (params) => {
     monthlyRent = 0,
     rentIncreaseRate = 0,
     investmentStartBalance = 0,
-    monthlyInvestment = 0,
+    monthlyBudget = 0,  // Changed from monthlyInvestment to monthlyBudget
     investmentReturn = 0,
     timeHorizon = 30
   } = params;
@@ -181,7 +181,7 @@ export const calculateScenario = (params) => {
     monthlyRent: Number(monthlyRent) || 0,
     rentIncreaseRate: Number(rentIncreaseRate) || 0,
     investmentStartBalance: Number(investmentStartBalance) || 0,
-    monthlyInvestment: Number(monthlyInvestment) || 0,
+    monthlyBudget: Number(monthlyBudget) || 0,  // Changed from monthlyInvestment
     investmentReturn: Number(investmentReturn) || 0,
     timeHorizon: Number(timeHorizon) || 30
   };
@@ -198,6 +198,9 @@ export const calculateScenario = (params) => {
     safeParams.hoaFees
   );
 
+  // Calculate effective monthly housing cost (rental income reduces effective housing costs)
+  const effectiveMonthlyHousingCost = Math.max(0, monthlyHousingCost - safeParams.rentalIncome);
+
   // Own scenario calculations
   const homeEquity = calculateHomeEquity(
     safeParams.homePrice,
@@ -211,7 +214,8 @@ export const calculateScenario = (params) => {
 
   // For own scenario, rental income can be invested monthly
   // Down payment is deducted from starting investment balance
-  const ownMonthlyInvestment = safeParams.monthlyInvestment + safeParams.rentalIncome;
+  // Monthly budget minus housing costs goes to investments
+  const ownMonthlyInvestment = Math.max(0, safeParams.monthlyBudget - effectiveMonthlyHousingCost);
   const ownStartingInvestmentBalance = Math.max(0, safeParams.investmentStartBalance - downPaymentAmount);
   const ownInvestments = calculateInvestmentGrowth(
     ownStartingInvestmentBalance,
@@ -222,16 +226,16 @@ export const calculateScenario = (params) => {
 
   const ownNetWorth = homeEquity.map((equity, index) => equity + ownInvestments[index]);
 
-  // Calculate effective monthly housing cost (rental income reduces effective housing costs)
-  const effectiveMonthlyHousingCost = Math.max(0, monthlyHousingCost - safeParams.rentalIncome);
-
-  // Rent scenario calculations - completely independent of ownership scenario
+  // Rent scenario calculations - budget minus rent goes to investments
   const rentCosts = calculateRentalCosts(safeParams.monthlyRent, safeParams.rentIncreaseRate, months);
   
-  // Rent scenario: invest starting balance + monthly investment (no cost savings dependency)
+  // Calculate monthly investment from budget allocation: budget minus rent
+  const rentMonthlyInvestment = Math.max(0, safeParams.monthlyBudget - safeParams.monthlyRent);
+  
+  // Rent scenario: invest starting balance + monthly budget allocation
   const rentInvestments = calculateInvestmentGrowth(
     safeParams.investmentStartBalance, // Keep full investment balance (no down payment needed)
-    safeParams.monthlyInvestment, // Only the specified monthly investment amount
+    rentMonthlyInvestment, // Budget minus rent goes to investments
     safeParams.investmentReturn,
     months
   );
@@ -268,13 +272,15 @@ export const calculateScenario = (params) => {
       homeEquity: homeEquity,
       investments: ownInvestments,
       totalCosts: ownCumulativeCosts,
-      monthlyPayments: Array(months + 1).fill(effectiveMonthlyHousingCost)
+      monthlyPayments: Array(months + 1).fill(effectiveMonthlyHousingCost),
+      monthlyInvestment: ownMonthlyInvestment
     },
     rentScenario: {
       netWorth: rentInvestments,
       investments: rentInvestments,
       totalCosts: rentCumulativeCosts,
-      monthlyPayments: rentCosts
+      monthlyPayments: rentCosts,
+      monthlyInvestment: rentMonthlyInvestment
     },
     breakEvenPoint: breakEvenPoint,
     downPaymentAmount: downPaymentAmount,
@@ -282,7 +288,8 @@ export const calculateScenario = (params) => {
     monthlyMortgagePayment: monthlyMortgagePayment,
     monthlyHousingCost: monthlyHousingCost,
     effectiveMonthlyHousingCost: effectiveMonthlyHousingCost,
-    rentalIncome: safeParams.rentalIncome
+    rentalIncome: safeParams.rentalIncome,
+    monthlyBudget: safeParams.monthlyBudget
   };
 };
 
