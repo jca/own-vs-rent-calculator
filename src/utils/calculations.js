@@ -214,8 +214,8 @@ export const calculateScenario = (params) => {
 
   // For own scenario, rental income can be invested monthly
   // Down payment is deducted from starting investment balance
-  // Monthly budget minus housing costs goes to investments
-  const ownMonthlyInvestment = Math.max(0, safeParams.monthlyBudget - effectiveMonthlyHousingCost);
+  // Monthly budget minus housing costs plus rental income goes to investments
+  const ownMonthlyInvestment = Math.max(0, safeParams.monthlyBudget - monthlyHousingCost + safeParams.rentalIncome);
   const ownStartingInvestmentBalance = Math.max(0, safeParams.investmentStartBalance - downPaymentAmount);
   const ownInvestments = calculateInvestmentGrowth(
     ownStartingInvestmentBalance,
