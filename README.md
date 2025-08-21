@@ -62,7 +62,7 @@ npm run deploy
 
 #### If You Rent:
 - **Starting Investment**: Full investment balance (no down payment needed)
-- **Monthly Investments**: Monthly investment contribution + monthly cost savings (ownership costs - rent)
+- **Monthly Investments**: Monthly investment contribution only
 - **Total Net Worth**: Investment portfolio only
 
 ### Homeownership Scenario
@@ -72,9 +72,9 @@ npm run deploy
 - **Total Costs**: Mortgage payments, taxes, insurance, maintenance, HOA fees (minus rental income)
 
 ### Renting Scenario
-- **Investment Portfolio**: Growth of invested funds (full starting balance + monthly savings)
+- **Investment Portfolio**: Growth of invested funds (independent of ownership scenario)
 - **Total Costs**: Rent payments with annual increases
-- **Monthly Cost Savings**: Difference between ownership costs and rent, invested monthly
+- **No Cross-Dependencies**: Rent scenario calculations are completely independent of ownership inputs
 
 ### Input Parameters
 

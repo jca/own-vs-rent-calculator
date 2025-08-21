@@ -334,7 +334,7 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
     <div className="section-note">
       <p>💡 <strong>Investment Strategy Comparison:</strong></p>
       <ul>
-        <li><strong>If you rent:</strong> Invest full starting balance + monthly investment + monthly cost savings (ownership costs - rent)</li>
+        <li><strong>If you rent:</strong> Invest full starting balance + monthly investment contribution</li>
         <li><strong>If you own:</strong> Invest starting balance minus down payment + monthly investment + rental income</li>
       </ul>
     </div>
@@ -408,9 +408,9 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
         <div className="scenario-box rent">
           <h5>🏠 Rent + Invest Scenario</h5>
           <ul>
-            <li>Invest down payment amount immediately</li>
-            <li>Invest monthly housing cost savings</li>
-            <li>Invest your additional monthly contributions</li>
+            <li>Keep full starting investment balance</li>
+            <li>Invest your monthly contributions</li>
+            <li>Independent of ownership costs</li>
             <li>Net worth = Total investments</li>
           </ul>
         </div>

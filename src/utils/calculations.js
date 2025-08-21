@@ -225,17 +225,13 @@ export const calculateScenario = (params) => {
   // Calculate effective monthly housing cost (rental income reduces effective housing costs)
   const effectiveMonthlyHousingCost = Math.max(0, monthlyHousingCost - safeParams.rentalIncome);
 
-  // Rent scenario calculations
+  // Rent scenario calculations - completely independent of ownership scenario
   const rentCosts = calculateRentalCosts(safeParams.monthlyRent, safeParams.rentIncreaseRate, months);
   
-  // Calculate monthly cost savings: what you save by renting vs owning
-  // This is the difference between total ownership costs and rent
-  const monthlyCostSavings = monthlyHousingCost - safeParams.monthlyRent;
-  
-  // For rent scenario: invest starting balance + monthly investment + monthly cost savings
+  // Rent scenario: invest starting balance + monthly investment (no cost savings dependency)
   const rentInvestments = calculateInvestmentGrowth(
     safeParams.investmentStartBalance, // Keep full investment balance (no down payment needed)
-    safeParams.monthlyInvestment + Math.max(0, monthlyCostSavings), // Add cost savings to monthly investment
+    safeParams.monthlyInvestment, // Only the specified monthly investment amount
     safeParams.investmentReturn,
     months
   );
@@ -286,7 +282,6 @@ export const calculateScenario = (params) => {
     monthlyMortgagePayment: monthlyMortgagePayment,
     monthlyHousingCost: monthlyHousingCost,
     effectiveMonthlyHousingCost: effectiveMonthlyHousingCost,
-    monthlyCostSavings: monthlyCostSavings,
     rentalIncome: safeParams.rentalIncome
   };
 };
