@@ -53,16 +53,28 @@ npm run deploy
 
 ## 📊 What It Calculates
 
+### Investment Strategy
+
+#### If You Own:
+- **Starting Investment**: Investment balance - down payment
+- **Monthly Investments**: Monthly investment contribution + rental income (if any)
+- **Total Net Worth**: Home equity + investment portfolio
+
+#### If You Rent:
+- **Starting Investment**: Full investment balance (no down payment needed)
+- **Monthly Investments**: Monthly investment contribution + monthly cost savings (ownership costs - rent)
+- **Total Net Worth**: Investment portfolio only
+
 ### Homeownership Scenario
-- **Total Net Worth**: Home equity + investments - remaining mortgage balance
+- **Total Net Worth**: Home equity + investments
 - **Home Equity Growth**: Property appreciation over time
-- **Investment Growth**: Returns on invested down payment difference and monthly savings
-- **Total Costs**: Mortgage payments, taxes, insurance, maintenance, HOA fees
+- **Investment Growth**: Returns on remaining funds after down payment
+- **Total Costs**: Mortgage payments, taxes, insurance, maintenance, HOA fees (minus rental income)
 
 ### Renting Scenario
-- **Investment Portfolio**: Growth of invested funds (down payment + monthly rent savings)
+- **Investment Portfolio**: Growth of invested funds (full starting balance + monthly savings)
 - **Total Costs**: Rent payments with annual increases
-- **Opportunity Cost**: Comparison of different investment strategies
+- **Monthly Cost Savings**: Difference between ownership costs and rent, invested monthly
 
 ### Input Parameters
 
@@ -117,9 +129,42 @@ The application includes several preset templates:
 
 ### URL Parameters
 
-Share scenarios using URL parameters:
-```
-?hp=500000&dp=20&mr=6.5&rent=2500&th=30
+Share scenarios using URL parameters. All input parameters are supported:
+
+#### Property & Mortgage Parameters
+- `hp` - Home Price (e.g., `hp=500000`)
+- `dp` - Down Payment percentage (e.g., `dp=20`)
+- `mr` - Mortgage Rate percentage (e.g., `mr=6.5`)
+- `lt` - Loan Term in years (e.g., `lt=30`)
+- `pt` - Property Tax Rate percentage (e.g., `pt=1.2`)
+- `hi` - Home Insurance annual amount (e.g., `hi=1500`)
+- `mc` - Maintenance Cost annual amount (e.g., `mc=5000`)
+- `hoa` - HOA Fees monthly amount (e.g., `hoa=150`)
+- `har` - Home Appreciation Rate percentage (e.g., `har=3.0`)
+- `ri` - Rental Income monthly amount (e.g., `ri=1000`)
+
+#### Rental Parameters
+- `rent` - Monthly Rent (e.g., `rent=2500`)
+- `rir` - Rent Increase Rate percentage (e.g., `rir=3.0`)
+
+#### Investment Parameters
+- `isb` - Investment Start Balance (e.g., `isb=50000`)
+- `mi` - Monthly Investment (e.g., `mi=500`)
+- `ir` - Investment Return percentage (e.g., `ir=7.0`)
+
+#### Analysis Parameters
+- `th` - Time Horizon in years (e.g., `th=30`)
+
+#### Example URLs
+```bash
+# Basic comparison
+?hp=400000&dp=10&mr=7.0&rent=2000&th=30
+
+# High-income scenario with rental income
+?hp=800000&dp=20&mr=6.5&rent=4000&ri=1500&isb=200000&th=25
+
+# Complete scenario with all parameters
+?hp=500000&dp=20&mr=6.5&lt=30&pt=1.2&hi=1500&mc=5000&hoa=100&har=3.0&ri=0&rent=2500&rir=3.0&isb=120000&mi=500&ir=7.0&th=30
 ```
 
 ### Local Storage

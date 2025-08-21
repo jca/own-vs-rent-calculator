@@ -289,3 +289,126 @@
     color: #b0b0b0;
   }
 }
+
+/* Scenario Comparison Styles */
+.comparison-explanation {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.comparison-explanation h4 {
+  margin: 0 0 1rem 0;
+  color: #495057;
+  font-size: 1.1rem;
+}
+
+.scenario-boxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.scenario-box {
+  padding: 1rem;
+  border-radius: 6px;
+  border: 2px solid;
+}
+
+.scenario-box.own {
+  background: #e8f5e8;
+  border-color: #28a745;
+}
+
+.scenario-box.rent {
+  background: #e8f4f8;
+  border-color: #007bff;
+}
+
+.scenario-box h5 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.scenario-box.own h5 {
+  color: #155724;
+}
+
+.scenario-box.rent h5 {
+  color: #004085;
+}
+
+.scenario-box ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  list-style-type: disc;
+}
+
+.scenario-box li {
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.scenario-box.own li {
+  color: #155724;
+}
+
+.scenario-box.rent li {
+  color: #004085;
+}
+
+.input-help {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Responsive design for scenario boxes */
+@media (max-width: 768px) {
+  .scenario-boxes {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Dark theme for scenario comparison */
+@media (prefers-color-scheme: dark) {
+  .comparison-explanation {
+    background: #2a2a2a;
+    border-color: #404040;
+  }
+
+  .comparison-explanation h4 {
+    color: #e0e0e0;
+  }
+
+  .scenario-box.own {
+    background: #1a2e1a;
+    border-color: #28a745;
+  }
+
+  .scenario-box.rent {
+    background: #1a2228;
+    border-color: #007bff;
+  }
+
+  .scenario-box.own h5,
+  .scenario-box.own li {
+    color: #52c878;
+  }
+
+  .scenario-box.rent h5,
+  .scenario-box.rent li {
+    color: #4dabf7;
+  }
+
+  .input-help {
+    color: #9ca3af;
+  }
+}

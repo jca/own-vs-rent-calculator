@@ -10,6 +10,11 @@
  * @returns {number} Monthly payment amount
  */
 export const calculateMonthlyPayment = (principal, annualRate, termYears) => {
+  // Safety checks
+  if (!principal || principal <= 0) return 0;
+  if (!termYears || termYears <= 0) return 0;
+  if (!annualRate || annualRate < 0) return principal / (termYears * 12);
+  
   if (annualRate === 0) {
     return principal / (termYears * 12);
   }
@@ -30,16 +35,18 @@ export const calculateMonthlyPayment = (principal, annualRate, termYears) => {
  * @returns {number} Remaining balance
  */
 export const calculateRemainingBalance = (principal, annualRate, termYears, monthsPaid) => {
+  // Safety checks
+  if (!principal || principal <= 0) return 0;
+  if (!termYears || termYears <= 0) return 0;
+  if (monthsPaid < 0) return principal;
+  if (monthsPaid >= termYears * 12) return 0;
+  
   if (annualRate === 0) {
     return Math.max(0, principal - (principal / (termYears * 12)) * monthsPaid);
   }
   
   const monthlyRate = annualRate / 12 / 100;
   const numPayments = termYears * 12;
-  
-  if (monthsPaid >= numPayments) {
-    return 0;
-  }
   
   return principal * (Math.pow(1 + monthlyRate, numPayments) - 
          Math.pow(1 + monthlyRate, monthsPaid)) / 
@@ -55,12 +62,20 @@ export const calculateRemainingBalance = (principal, annualRate, termYears, mont
  * @returns {number[]} Array of investment values by month
  */
 export const calculateInvestmentGrowth = (principal, monthlyContribution, annualRate, months) => {
-  const monthlyRate = annualRate / 12 / 100;
-  let balance = principal;
+  // Safety checks
+  const safePrincipal = Number(principal) || 0;
+  const safeMonthlyContribution = Number(monthlyContribution) || 0;
+  const safeAnnualRate = Number(annualRate) || 0;
+  const safeMonths = Number(months) || 0;
+  
+  if (safeMonths <= 0) return [safePrincipal];
+  
+  const monthlyRate = safeAnnualRate / 12 / 100;
+  let balance = safePrincipal;
   const values = [balance];
   
-  for (let month = 1; month <= months; month++) {
-    balance = (balance + monthlyContribution) * (1 + monthlyRate);
+  for (let month = 1; month <= safeMonths; month++) {
+    balance = (balance + safeMonthlyContribution) * (1 + monthlyRate);
     values.push(balance);
   }
   
@@ -135,61 +150,93 @@ export const calculateRentalCosts = (initialRent, rentIncreaseRate, months) => {
  */
 export const calculateScenario = (params) => {
   const {
-    homePrice,
-    downPayment,
-    mortgageRate,
-    loanTerm,
-    propertyTaxRate,
-    homeInsurance,
-    maintenanceCost,
-    hoaFees,
-    monthlyRent,
-    rentIncreaseRate,
-    investmentStartBalance,
-    monthlyInvestment,
-    investmentReturn,
-    timeHorizon
+    homePrice = 0,
+    downPayment = 0,
+    mortgageRate = 0,
+    loanTerm = 30,
+    propertyTaxRate = 0,
+    homeInsurance = 0,
+    maintenanceCost = 0,
+    hoaFees = 0,
+    monthlyRent = 0,
+    rentIncreaseRate = 0,
+    investmentStartBalance = 0,
+    monthlyInvestment = 0,
+    investmentReturn = 0,
+    timeHorizon = 30
   } = params;
 
-  const months = timeHorizon * 12;
-  const downPaymentAmount = (downPayment / 100) * homePrice;
-  const loanAmount = homePrice - downPaymentAmount;
-  const monthlyMortgagePayment = calculateMonthlyPayment(loanAmount, mortgageRate, loanTerm);
+  // Ensure all values are numbers and not NaN
+  const safeParams = {
+    homePrice: Number(homePrice) || 0,
+    downPayment: Number(downPayment) || 0,
+    mortgageRate: Number(mortgageRate) || 0,
+    loanTerm: Number(loanTerm) || 30,
+    propertyTaxRate: Number(propertyTaxRate) || 0,
+    homeInsurance: Number(homeInsurance) || 0,
+    maintenanceCost: Number(maintenanceCost) || 0,
+    hoaFees: Number(hoaFees) || 0,
+    homeAppreciationRate: Number(params.homeAppreciationRate) || 3.0,
+    rentalIncome: Number(params.rentalIncome) || 0,
+    monthlyRent: Number(monthlyRent) || 0,
+    rentIncreaseRate: Number(rentIncreaseRate) || 0,
+    investmentStartBalance: Number(investmentStartBalance) || 0,
+    monthlyInvestment: Number(monthlyInvestment) || 0,
+    investmentReturn: Number(investmentReturn) || 0,
+    timeHorizon: Number(timeHorizon) || 30
+  };
+
+  const months = safeParams.timeHorizon * 12;
+  const downPaymentAmount = (safeParams.downPayment / 100) * safeParams.homePrice;
+  const loanAmount = safeParams.homePrice - downPaymentAmount;
+  const monthlyMortgagePayment = calculateMonthlyPayment(loanAmount, safeParams.mortgageRate, safeParams.loanTerm);
   const monthlyHousingCost = calculateMonthlyHousingCost(
     monthlyMortgagePayment,
-    (propertyTaxRate / 100) * homePrice,
-    homeInsurance,
-    maintenanceCost,
-    hoaFees
+    (safeParams.propertyTaxRate / 100) * safeParams.homePrice,
+    safeParams.homeInsurance,
+    safeParams.maintenanceCost,
+    safeParams.hoaFees
   );
 
   // Own scenario calculations
   const homeEquity = calculateHomeEquity(
-    homePrice,
-    3, // Assume 3% appreciation if not provided
+    safeParams.homePrice,
+    safeParams.homeAppreciationRate,
     downPaymentAmount,
     loanAmount,
-    mortgageRate,
-    loanTerm,
+    safeParams.mortgageRate,
+    safeParams.loanTerm,
     months
   );
 
+  // For own scenario, rental income can be invested monthly
+  // Down payment is deducted from starting investment balance
+  const ownMonthlyInvestment = safeParams.monthlyInvestment + safeParams.rentalIncome;
+  const ownStartingInvestmentBalance = Math.max(0, safeParams.investmentStartBalance - downPaymentAmount);
   const ownInvestments = calculateInvestmentGrowth(
-    investmentStartBalance,
-    monthlyInvestment,
-    investmentReturn,
+    ownStartingInvestmentBalance,
+    ownMonthlyInvestment,
+    safeParams.investmentReturn,
     months
   );
 
   const ownNetWorth = homeEquity.map((equity, index) => equity + ownInvestments[index]);
 
+  // Calculate effective monthly housing cost (rental income reduces effective housing costs)
+  const effectiveMonthlyHousingCost = Math.max(0, monthlyHousingCost - safeParams.rentalIncome);
+
   // Rent scenario calculations
-  const rentCosts = calculateRentalCosts(monthlyRent, rentIncreaseRate, months);
-  const rentSavings = monthlyHousingCost - monthlyRent; // Initial difference
+  const rentCosts = calculateRentalCosts(safeParams.monthlyRent, safeParams.rentIncreaseRate, months);
+  
+  // Calculate monthly cost savings: what you save by renting vs owning
+  // This is the difference between total ownership costs and rent
+  const monthlyCostSavings = monthlyHousingCost - safeParams.monthlyRent;
+  
+  // For rent scenario: invest starting balance + monthly investment + monthly cost savings
   const rentInvestments = calculateInvestmentGrowth(
-    investmentStartBalance + downPaymentAmount, // Include down payment in investments
-    monthlyInvestment + Math.max(0, rentSavings),
-    investmentReturn,
+    safeParams.investmentStartBalance, // Keep full investment balance (no down payment needed)
+    safeParams.monthlyInvestment + Math.max(0, monthlyCostSavings), // Add cost savings to monthly investment
+    safeParams.investmentReturn,
     months
   );
 
@@ -201,7 +248,9 @@ export const calculateScenario = (params) => {
 
   for (let month = 0; month <= months; month++) {
     if (month > 0) {
-      ownTotal += monthlyHousingCost;
+      // Own scenario pays effective monthly housing cost (reduced by rental income)
+      ownTotal += effectiveMonthlyHousingCost;
+      // Rent scenario pays current month's rent
       rentTotal += rentCosts[month - 1];
     }
     ownCumulativeCosts.push(ownTotal);
@@ -223,7 +272,7 @@ export const calculateScenario = (params) => {
       homeEquity: homeEquity,
       investments: ownInvestments,
       totalCosts: ownCumulativeCosts,
-      monthlyPayments: Array(months + 1).fill(monthlyHousingCost)
+      monthlyPayments: Array(months + 1).fill(effectiveMonthlyHousingCost)
     },
     rentScenario: {
       netWorth: rentInvestments,
@@ -233,8 +282,12 @@ export const calculateScenario = (params) => {
     },
     breakEvenPoint: breakEvenPoint,
     downPaymentAmount: downPaymentAmount,
+    ownStartingInvestmentBalance: ownStartingInvestmentBalance,
     monthlyMortgagePayment: monthlyMortgagePayment,
-    monthlyHousingCost: monthlyHousingCost
+    monthlyHousingCost: monthlyHousingCost,
+    effectiveMonthlyHousingCost: effectiveMonthlyHousingCost,
+    monthlyCostSavings: monthlyCostSavings,
+    rentalIncome: safeParams.rentalIncome
   };
 };
 
@@ -245,14 +298,18 @@ export const calculateScenario = (params) => {
  * @returns {string} Formatted currency string
  */
 export const formatCurrency = (value, compact = false) => {
+  // Safety check for NaN, null, undefined
+  const safeValue = Number(value);
+  if (isNaN(safeValue)) return '$0';
+  
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-    notation: compact && Math.abs(value) >= 1000 ? 'compact' : 'standard',
+    notation: compact && Math.abs(safeValue) >= 1000 ? 'compact' : 'standard',
     maximumFractionDigits: 0
   });
   
-  return formatter.format(value);
+  return formatter.format(safeValue);
 };
 
 /**
@@ -263,4 +320,54 @@ export const formatCurrency = (value, compact = false) => {
  */
 export const formatPercentage = (value, decimals = 1) => {
   return `${value.toFixed(decimals)}%`;
+};
+
+/**
+ * Validate input parameters
+ * @param {object} params - Input parameters to validate
+ * @returns {object} Validation result with isValid flag and errors object
+ */
+export const validateParameters = (params) => {
+  const errors = {};
+  
+  if (!params.homePrice || params.homePrice <= 0) {
+    errors.homePrice = "Home price must be greater than 0";
+  }
+  
+  if (params.downPayment < 0 || params.downPayment > 100) {
+    errors.downPayment = "Down payment must be between 0% and 100%";
+  }
+  
+  if (params.mortgageRate < 0 || params.mortgageRate > 50) {
+    errors.mortgageRate = "Mortgage rate must be between 0% and 50%";
+  }
+  
+  if (!params.loanTerm || params.loanTerm <= 0 || params.loanTerm > 50) {
+    errors.loanTerm = "Loan term must be between 1 and 50 years";
+  }
+  
+  if (params.propertyTaxRate < 0 || params.propertyTaxRate > 10) {
+    errors.propertyTaxRate = "Property tax rate must be between 0% and 10%";
+  }
+  
+  if (!params.monthlyRent || params.monthlyRent <= 0) {
+    errors.monthlyRent = "Monthly rent must be greater than 0";
+  }
+  
+  if (params.rentIncreaseRate < 0 || params.rentIncreaseRate > 20) {
+    errors.rentIncreaseRate = "Rent increase rate must be between 0% and 20%";
+  }
+  
+  if (params.investmentReturn < -50 || params.investmentReturn > 50) {
+    errors.investmentReturn = "Investment return must be between -50% and 50%";
+  }
+  
+  if (!params.timeHorizon || params.timeHorizon <= 0 || params.timeHorizon > 50) {
+    errors.timeHorizon = "Time horizon must be between 1 and 50 years";
+  }
+  
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
 };

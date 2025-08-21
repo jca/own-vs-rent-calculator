@@ -130,11 +130,11 @@ const NetWorthChart = ({ data, width = 800, height = 400 }) => {
     // Add legend
     const legend = g.append('g')
       .attr('class', 'legend')
-      .attr('transform', `translate(${chartWidth - 150}, 20)`);
+      .attr('transform', `translate(${chartWidth - 180}, 20)`);
 
     const legendItems = [
-      { label: 'Own', color: '#2563eb' },
-      { label: 'Rent', color: '#dc2626' }
+      { label: '🏠 Own + Invest', color: '#2563eb' },
+      { label: '🏠 Rent + Invest', color: '#dc2626' }
     ];
 
     const legendItem = legend.selectAll('.legend-item')
@@ -190,17 +190,17 @@ const NetWorthChart = ({ data, width = 800, height = 400 }) => {
               <div class="tooltip-content">
                 <div class="tooltip-title">Year ${year}</div>
                 <div class="tooltip-item">
-                  <span class="tooltip-label own">Own:</span>
+                  <span class="tooltip-label own">🏠 Own + Invest:</span>
                   <span class="tooltip-value">${formatCurrency(dataPoint.ownNetWorth)}</span>
                 </div>
                 <div class="tooltip-item">
-                  <span class="tooltip-label rent">Rent:</span>
+                  <span class="tooltip-label rent">🏠 Rent + Invest:</span>
                   <span class="tooltip-value">${formatCurrency(dataPoint.rentNetWorth)}</span>
                 </div>
                 <div class="tooltip-item">
-                  <span class="tooltip-label difference">Difference:</span>
+                  <span class="tooltip-label difference">Advantage:</span>
                   <span class="tooltip-value ${dataPoint.ownNetWorth > dataPoint.rentNetWorth ? 'positive' : 'negative'}">
-                    ${formatCurrency(dataPoint.ownNetWorth - dataPoint.rentNetWorth)}
+                    ${dataPoint.ownNetWorth > dataPoint.rentNetWorth ? 'Own' : 'Rent'} by ${formatCurrency(Math.abs(dataPoint.ownNetWorth - dataPoint.rentNetWorth))}
                   </span>
                 </div>
               </div>
@@ -215,8 +215,8 @@ const NetWorthChart = ({ data, width = 800, height = 400 }) => {
   return (
     <div className="chart-container">
       <div className="chart-header">
-        <h3>Net Worth Comparison Over Time</h3>
-        <p>Compare total wealth accumulation between owning and renting</p>
+        <h3>📊 Net Worth Comparison: Own + Invest vs Rent + Invest</h3>
+        <p>Compare total wealth accumulation between the two strategies over time</p>
       </div>
       <svg
         ref={svgRef}

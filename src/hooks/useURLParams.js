@@ -12,6 +12,8 @@ const urlParams = {
   homeInsurance: 'hi',
   maintenanceCost: 'mc',
   hoaFees: 'hoa',
+  homeAppreciationRate: 'har',
+  rentalIncome: 'ri',
   monthlyRent: 'rent',
   rentIncreaseRate: 'rir',
   investmentStartBalance: 'isb',

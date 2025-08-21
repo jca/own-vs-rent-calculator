@@ -240,6 +240,42 @@ const PropertySection = ({ parameters, onInputChange }) => (
           <span className="input-suffix">/month</span>
         </div>
       </div>
+
+      <div className="input-group">
+        <label htmlFor="homeAppreciationRate">Home Appreciation Rate</label>
+        <div className="input-wrapper">
+          <input
+            type="number"
+            id="homeAppreciationRate"
+            value={parameters.homeAppreciationRate || ''}
+            onChange={(e) => onInputChange('homeAppreciationRate', e.target.value)}
+            placeholder="3.0"
+            min="-10"
+            max="20"
+            step="0.1"
+          />
+          <span className="input-suffix">%/year</span>
+        </div>
+        <small className="input-help">Expected annual increase in home value (historical average ~3-4%)</small>
+      </div>
+
+      <div className="input-group">
+        <label htmlFor="rentalIncome">Rental Income (Optional)</label>
+        <div className="input-wrapper">
+          <span className="input-prefix">$</span>
+          <input
+            type="number"
+            id="rentalIncome"
+            value={parameters.rentalIncome || ''}
+            onChange={(e) => onInputChange('rentalIncome', e.target.value)}
+            placeholder="0"
+            min="0"
+            step="100"
+          />
+          <span className="input-suffix">/month</span>
+        </div>
+        <small className="input-help">Income from renting out rooms, basement, or duplex unit</small>
+      </div>
     </div>
   </div>
 );
@@ -294,7 +330,14 @@ const RentalSection = ({ parameters, onInputChange }) => (
  */
 const InvestmentSection = ({ parameters, onInputChange }) => (
   <div className="form-section">
-    <h3>Investment Details</h3>
+    <h3>Investment Strategy</h3>
+    <div className="section-note">
+      <p>💡 <strong>Investment Strategy Comparison:</strong></p>
+      <ul>
+        <li><strong>If you rent:</strong> Invest full starting balance + monthly investment + monthly cost savings (ownership costs - rent)</li>
+        <li><strong>If you own:</strong> Invest starting balance minus down payment + monthly investment + rental income</li>
+      </ul>
+    </div>
     
     <div className="input-grid">
       <div className="input-group">
@@ -311,6 +354,7 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
             step="1000"
           />
         </div>
+        <small className="input-help">Money you already have available to invest</small>
       </div>
 
       <div className="input-group">
@@ -328,6 +372,7 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
           />
           <span className="input-suffix">/month</span>
         </div>
+        <small className="input-help">Additional monthly amount you can invest regardless of housing choice</small>
       </div>
 
       <div className="input-group">
@@ -344,6 +389,30 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
             step="0.1"
           />
           <span className="input-suffix">%</span>
+        </div>
+        <small className="input-help">Long-term average return for index funds (~7%), bonds (~4%), or other investments</small>
+      </div>
+    </div>
+    
+    <div className="comparison-explanation">
+      <h4>📊 How the Comparison Works:</h4>
+      <div className="scenario-boxes">
+        <div className="scenario-box own">
+          <h5>🏠 Own Scenario</h5>
+          <ul>
+            <li>Build home equity through mortgage payments</li>
+            <li>Invest your starting balance + monthly contributions</li>
+            <li>Net worth = Home equity + Investments</li>
+          </ul>
+        </div>
+        <div className="scenario-box rent">
+          <h5>🏠 Rent + Invest Scenario</h5>
+          <ul>
+            <li>Invest down payment amount immediately</li>
+            <li>Invest monthly housing cost savings</li>
+            <li>Invest your additional monthly contributions</li>
+            <li>Net worth = Total investments</li>
+          </ul>
         </div>
       </div>
     </div>

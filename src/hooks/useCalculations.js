@@ -48,20 +48,22 @@ export const useCalculations = (parameters) => {
    * Calculate summary statistics
    */
   const summary = useMemo(() => {
-    if (results.error || !results.ownScenario) {
+    if (results.error || !results.ownScenario || !results.rentScenario) {
       return null;
     }
 
-    const { ownScenario, rentScenario, timeHorizon } = results;
+    const { ownScenario, rentScenario } = results;
+    const timeHorizon = Number(parameters.timeHorizon) || 30;
     const finalIndex = Math.min(timeHorizon * 12, ownScenario.netWorth.length - 1);
 
-    const ownFinalNetWorth = ownScenario.netWorth[finalIndex];
-    const rentFinalNetWorth = rentScenario.netWorth[finalIndex];
+    // Safety checks for array access and NaN values
+    const ownFinalNetWorth = Number(ownScenario.netWorth[finalIndex]) || 0;
+    const rentFinalNetWorth = Number(rentScenario.netWorth[finalIndex]) || 0;
     const difference = ownFinalNetWorth - rentFinalNetWorth;
-    const differencePercent = ((difference / rentFinalNetWorth) * 100);
+    const differencePercent = rentFinalNetWorth !== 0 ? ((difference / rentFinalNetWorth) * 100) : 0;
 
-    const ownTotalCosts = ownScenario.totalCosts[finalIndex];
-    const rentTotalCosts = rentScenario.totalCosts[finalIndex];
+    const ownTotalCosts = Number(ownScenario.totalCosts[finalIndex]) || 0;
+    const rentTotalCosts = Number(rentScenario.totalCosts[finalIndex]) || 0;
     const costDifference = ownTotalCosts - rentTotalCosts;
 
     return {
@@ -72,9 +74,13 @@ export const useCalculations = (parameters) => {
       ownTotalCosts,
       rentTotalCosts,
       costDifference,
-      timeHorizon: parameters.timeHorizon,
+      timeHorizon,
       breakEvenPoint: results.breakEvenPoint,
-      recommendation: difference > 0 ? 'own' : 'rent'
+      recommendation: difference > 0 ? 'own' : 'rent',
+      rentalIncome: Number(parameters.rentalIncome) || 0,
+      downPaymentAmount: results.downPaymentAmount || 0,
+      ownStartingInvestments: results.ownStartingInvestmentBalance || 0,
+      rentStartingInvestments: Number(parameters.investmentStartBalance) || 0
     };
   }, [results, parameters.timeHorizon]);
 
@@ -82,22 +88,25 @@ export const useCalculations = (parameters) => {
    * Calculate year-by-year data for charts
    */
   const chartData = useMemo(() => {
-    if (results.error || !results.ownScenario) {
+    if (results.error || !results.ownScenario || !results.rentScenario) {
       return null;
     }
 
     const { ownScenario, rentScenario } = results;
-    const years = parameters.timeHorizon;
+    const years = Number(parameters.timeHorizon) || 30;
     const data = [];
 
     for (let year = 0; year <= years; year++) {
       const monthIndex = year * 12;
       
-      if (monthIndex < ownScenario.netWorth.length) {
+      if (monthIndex < ownScenario.netWorth.length && monthIndex < rentScenario.netWorth.length) {
+        const ownNetWorth = Number(ownScenario.netWorth[monthIndex]) || 0;
+        const rentNetWorth = Number(rentScenario.netWorth[monthIndex]) || 0;
+        
         data.push({
           year,
-          ownNetWorth: ownScenario.netWorth[monthIndex],
-          rentNetWorth: rentScenario.netWorth[monthIndex],
+          ownNetWorth,
+          rentNetWorth,
           homeEquity: ownScenario.homeEquity[monthIndex],
           ownInvestments: ownScenario.investments[monthIndex],
           rentInvestments: rentScenario.investments[monthIndex],
@@ -137,6 +146,16 @@ const validateParameters = (params) => {
   // Down payment validation
   if (params.downPayment < 0 || params.downPayment > 100) {
     errors.downPayment = "Down payment must be between 0% and 100%";
+  }
+
+  // Validate down payment amount against starting investment balance
+  if (params.homePrice && params.downPayment && params.investmentStartBalance !== undefined) {
+    const downPaymentAmount = (params.downPayment / 100) * params.homePrice;
+    const startingBalance = Number(params.investmentStartBalance) || 0;
+    
+    if (downPaymentAmount > startingBalance) {
+      errors.downPayment = `Down payment ($${downPaymentAmount.toLocaleString()}) exceeds available investment balance ($${startingBalance.toLocaleString()}) for ownership scenario`;
+    }
   }
 
   // Mortgage rate validation
@@ -193,6 +212,16 @@ const validateParameters = (params) => {
 
   if (params.monthlyInvestment < 0) {
     errors.monthlyInvestment = "Monthly investment cannot be negative";
+  }
+
+  // Home appreciation rate validation
+  if (params.homeAppreciationRate < -10 || params.homeAppreciationRate > 20) {
+    errors.homeAppreciationRate = "Home appreciation rate must be between -10% and 20%";
+  }
+
+  // Rental income validation
+  if (params.rentalIncome < 0) {
+    errors.rentalIncome = "Rental income cannot be negative";
   }
 
   return {

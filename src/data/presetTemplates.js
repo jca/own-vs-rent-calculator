@@ -6,7 +6,7 @@ export const presetTemplates = {
   firstTimeBuyer: {
     id: 'first-time-buyer',
     name: "First-time Buyer",
-    description: "Conservative assumptions for new homeowners",
+    description: "Conservative scenario: Compare owning + investing vs renting + investing for new homeowners",
     parameters: {
       homePrice: 400000,
       downPayment: 10,
@@ -16,9 +16,11 @@ export const presetTemplates = {
       homeInsurance: 1200,
       maintenanceCost: 4000,
       hoaFees: 0,
+      homeAppreciationRate: 3.0,
+      rentalIncome: 0,
       monthlyRent: 2000,
       rentIncreaseRate: 3.0,
-      investmentStartBalance: 10000,
+      investmentStartBalance: 50000, // Increased to cover $40k down payment + emergency fund
       monthlyInvestment: 500,
       investmentReturn: 7.0,
       timeHorizon: 30
@@ -28,7 +30,7 @@ export const presetTemplates = {
   highIncomeUrban: {
     id: 'high-income-urban',
     name: "High-income Urban Professional",
-    description: "Higher property values and investment capacity",
+    description: "High-cost area: Will rent + aggressive investing beat expensive homeownership?",
     parameters: {
       homePrice: 800000,
       downPayment: 20,
@@ -38,9 +40,11 @@ export const presetTemplates = {
       homeInsurance: 2000,
       maintenanceCost: 8000,
       hoaFees: 300,
+      homeAppreciationRate: 4.0,
+      rentalIncome: 1500,
       monthlyRent: 4000,
       rentIncreaseRate: 4.0,
-      investmentStartBalance: 50000,
+      investmentStartBalance: 200000, // Increased to cover $160k down payment + buffer
       monthlyInvestment: 1500,
       investmentReturn: 8.0,
       timeHorizon: 25
@@ -50,7 +54,7 @@ export const presetTemplates = {
   retirementPlanning: {
     id: 'retirement-planning',
     name: "Retirement Planning",
-    description: "Long-term 30+ year projections",
+    description: "Long-term wealth building: Own + invest vs rent + invest over 35 years",
     parameters: {
       homePrice: 500000,
       downPayment: 20,
@@ -60,9 +64,11 @@ export const presetTemplates = {
       homeInsurance: 1500,
       maintenanceCost: 5000,
       hoaFees: 150,
+      homeAppreciationRate: 2.5,
+      rentalIncome: 0,
       monthlyRent: 2500,
       rentIncreaseRate: 2.5,
-      investmentStartBalance: 25000,
+      investmentStartBalance: 120000, // Increased to cover $100k down payment + buffer
       monthlyInvestment: 1000,
       investmentReturn: 7.5,
       timeHorizon: 35
@@ -72,7 +78,7 @@ export const presetTemplates = {
   youngProfessional: {
     id: 'young-professional',
     name: "Young Professional",
-    description: "Starting career with growth potential",
+    description: "Early career: Small down payment vs investing the money in markets",
     parameters: {
       homePrice: 300000,
       downPayment: 5,
@@ -82,9 +88,11 @@ export const presetTemplates = {
       homeInsurance: 900,
       maintenanceCost: 3000,
       hoaFees: 0,
+      homeAppreciationRate: 4.5,
+      rentalIncome: 800,
       monthlyRent: 1500,
       rentIncreaseRate: 3.5,
-      investmentStartBalance: 5000,
+      investmentStartBalance: 20000, // Increased to cover $15k down payment + buffer
       monthlyInvestment: 300,
       investmentReturn: 8.5,
       timeHorizon: 20
@@ -94,7 +102,7 @@ export const presetTemplates = {
   suburbanFamily: {
     id: 'suburban-family',
     name: "Suburban Family",
-    description: "Family-oriented with moderate costs",
+    description: "Family scenario: Larger home ownership vs renting + investing the difference",
     parameters: {
       homePrice: 600000,
       downPayment: 15,
@@ -104,9 +112,11 @@ export const presetTemplates = {
       homeInsurance: 1800,
       maintenanceCost: 6000,
       hoaFees: 100,
+      homeAppreciationRate: 3.2,
+      rentalIncome: 0,
       monthlyRent: 3000,
       rentIncreaseRate: 3.2,
-      investmentStartBalance: 20000,
+      investmentStartBalance: 110000, // Increased to cover $90k down payment + buffer
       monthlyInvestment: 800,
       investmentReturn: 7.2,
       timeHorizon: 30
@@ -129,7 +139,7 @@ export const getPresetOptions = () => {
  * Get preset template by ID
  */
 export const getPresetTemplate = (id) => {
-  return presetTemplates[id] || null;
+  return Object.values(presetTemplates).find(template => template.id === id) || null;
 };
 
 /**
@@ -144,9 +154,11 @@ export const defaultParameters = {
   homeInsurance: 1500,
   maintenanceCost: 5000,
   hoaFees: 0,
+  homeAppreciationRate: 3.0,
+  rentalIncome: 0,
   monthlyRent: 2500,
   rentIncreaseRate: 3.0,
-  investmentStartBalance: 10000,
+  investmentStartBalance: 120000, // Increased to cover $100k down payment + buffer
   monthlyInvestment: 500,
   investmentReturn: 7.0,
   timeHorizon: 30
