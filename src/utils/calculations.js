@@ -10,10 +10,14 @@
  * @returns {number} Monthly payment amount
  */
 export const calculateMonthlyPayment = (principal, annualRate, termYears) => {
-  // Safety checks
-  if (!principal || principal <= 0) return 0;
-  if (!termYears || termYears <= 0) return 0;
-  if (!annualRate || annualRate < 0) return principal / (termYears * 12);
+  // Safety checks - allow 0 values for debugging
+  if (principal < 0) return 0;
+  if (termYears < 0) return 0;
+  if (annualRate < 0) return 0;
+  
+  // Handle edge cases
+  if (principal === 0) return 0;
+  if (termYears === 0) return 0; // Avoid division by zero
   
   if (annualRate === 0) {
     return principal / (termYears * 12);
@@ -35,10 +39,15 @@ export const calculateMonthlyPayment = (principal, annualRate, termYears) => {
  * @returns {number} Remaining balance
  */
 export const calculateRemainingBalance = (principal, annualRate, termYears, monthsPaid) => {
-  // Safety checks
-  if (!principal || principal <= 0) return 0;
-  if (!termYears || termYears <= 0) return 0;
+  // Safety checks - allow 0 values for debugging
+  if (principal < 0) return 0;
+  if (termYears < 0) return 0;
+  if (annualRate < 0) return 0;
   if (monthsPaid < 0) return principal;
+  
+  // Handle edge cases
+  if (principal === 0) return 0;
+  if (termYears === 0) return 0;
   if (monthsPaid >= termYears * 12) return 0;
   
   if (annualRate === 0) {
@@ -48,9 +57,12 @@ export const calculateRemainingBalance = (principal, annualRate, termYears, mont
   const monthlyRate = annualRate / 12 / 100;
   const numPayments = termYears * 12;
   
-  return principal * (Math.pow(1 + monthlyRate, numPayments) - 
+  const remainingBalance = principal * (Math.pow(1 + monthlyRate, numPayments) - 
          Math.pow(1 + monthlyRate, monthsPaid)) / 
          (Math.pow(1 + monthlyRate, numPayments) - 1);
+  
+  // Ensure remaining balance is never negative
+  return Math.max(0, remainingBalance);
 };
 
 /**
@@ -68,7 +80,7 @@ export const calculateInvestmentGrowth = (principal, monthlyContribution, annual
   const safeAnnualRate = Number(annualRate) || 0;
   const safeMonths = Number(months) || 0;
   
-  if (safeMonths <= 0) return [safePrincipal];
+  if (safeMonths < 0) return [safePrincipal]; // Allow 0 months for debugging
   
   const monthlyRate = safeAnnualRate / 12 / 100;
   let balance = safePrincipal;
@@ -96,7 +108,7 @@ export const calculateInvestmentGrowthWithVariableContributions = (principal, mo
   const safeAnnualRate = Number(annualRate) || 0;
   const safeMonths = Number(months) || 0;
   
-  if (safeMonths <= 0) return [safePrincipal];
+  if (safeMonths < 0) return [safePrincipal]; // Allow 0 months for debugging
   
   const monthlyRate = safeAnnualRate / 12 / 100;
   let balance = safePrincipal;
@@ -130,7 +142,11 @@ export const calculateHomeEquity = (initialPrice, appreciationRate, downPayment,
     const years = month / 12;
     const currentValue = initialPrice * Math.pow(1 + appreciationRate / 100, years);
     const remainingBalance = calculateRemainingBalance(principal, mortgageRate, termYears, month);
+    
+    // Equity = current home value - remaining mortgage balance
+    // Since remainingBalance is now guaranteed to be >= 0, equity will never exceed currentValue
     const equityValue = Math.max(0, currentValue - remainingBalance);
+    
     equity.push(equityValue);
   }
   

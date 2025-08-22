@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { getPresetOptions, getPresetTemplate } from '../../data/presetTemplates';
 import './InputForm.css';
 
+// Helper function to properly display values including zero
+const getDisplayValue = (value) => {
+  return value !== undefined && value !== null ? value : '';
+};
+
 /**
  * Main input form for Own vs Rent Calculator
  */
@@ -113,7 +118,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="homePrice"
-            value={parameters.homePrice || ''}
+            value={getDisplayValue(parameters.homePrice)}
             onChange={(e) => onInputChange('homePrice', e.target.value)}
             placeholder="500,000"
             min="0"
@@ -128,7 +133,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="downPayment"
-            value={parameters.downPayment || ''}
+            value={getDisplayValue(parameters.downPayment)}
             onChange={(e) => onInputChange('downPayment', e.target.value)}
             placeholder="20"
             min="0"
@@ -145,7 +150,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="mortgageRate"
-            value={parameters.mortgageRate || ''}
+            value={getDisplayValue(parameters.mortgageRate)}
             onChange={(e) => onInputChange('mortgageRate', e.target.value)}
             placeholder="6.5"
             min="0"
@@ -162,7 +167,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="loanTerm"
-            value={parameters.loanTerm || ''}
+            value={getDisplayValue(parameters.loanTerm)}
             onChange={(e) => onInputChange('loanTerm', e.target.value)}
             placeholder="30"
             min="0"
@@ -179,7 +184,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="propertyTaxRate"
-            value={parameters.propertyTaxRate || ''}
+            value={getDisplayValue(parameters.propertyTaxRate)}
             onChange={(e) => onInputChange('propertyTaxRate', e.target.value)}
             placeholder="1.2"
             min="0"
@@ -197,7 +202,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="homeInsurance"
-            value={parameters.homeInsurance || ''}
+            value={getDisplayValue(parameters.homeInsurance)}
             onChange={(e) => onInputChange('homeInsurance', e.target.value)}
             placeholder="1,500"
             min="0"
@@ -214,7 +219,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="maintenanceCost"
-            value={parameters.maintenanceCost || ''}
+            value={getDisplayValue(parameters.maintenanceCost)}
             onChange={(e) => onInputChange('maintenanceCost', e.target.value)}
             placeholder="5,000"
             min="0"
@@ -231,7 +236,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="hoaFees"
-            value={parameters.hoaFees || ''}
+            value={getDisplayValue(parameters.hoaFees)}
             onChange={(e) => onInputChange('hoaFees', e.target.value)}
             placeholder="0"
             min="0"
@@ -247,7 +252,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="homeAppreciationRate"
-            value={parameters.homeAppreciationRate || ''}
+            value={getDisplayValue(parameters.homeAppreciationRate)}
             onChange={(e) => onInputChange('homeAppreciationRate', e.target.value)}
             placeholder="3.0"
             min="-10"
@@ -266,7 +271,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="rentalIncome"
-            value={parameters.rentalIncome || ''}
+            value={getDisplayValue(parameters.rentalIncome)}
             onChange={(e) => onInputChange('rentalIncome', e.target.value)}
             placeholder="0"
             min="0"
@@ -295,7 +300,7 @@ const RentalSection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="monthlyRent"
-            value={parameters.monthlyRent || ''}
+            value={getDisplayValue(parameters.monthlyRent)}
             onChange={(e) => onInputChange('monthlyRent', e.target.value)}
             placeholder="2,500"
             min="0"
@@ -311,7 +316,7 @@ const RentalSection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="rentIncreaseRate"
-            value={parameters.rentIncreaseRate || ''}
+            value={getDisplayValue(parameters.rentIncreaseRate)}
             onChange={(e) => onInputChange('rentIncreaseRate', e.target.value)}
             placeholder="3.0"
             min="0"
@@ -348,7 +353,7 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="investmentStartBalance"
-            value={parameters.investmentStartBalance || ''}
+            value={getDisplayValue(parameters.investmentStartBalance)}
             onChange={(e) => onInputChange('investmentStartBalance', e.target.value)}
             placeholder="10,000"
             min="0"
@@ -365,7 +370,7 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="monthlyBudget"
-            value={parameters.monthlyBudget || ''}
+            value={getDisplayValue(parameters.monthlyBudget)}
             onChange={(e) => onInputChange('monthlyBudget', e.target.value)}
             placeholder="3000"
             min="0"
@@ -382,7 +387,7 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="investmentReturn"
-            value={parameters.investmentReturn || ''}
+            value={getDisplayValue(parameters.investmentReturn)}
             onChange={(e) => onInputChange('investmentReturn', e.target.value)}
             placeholder="7.0"
             min="-50"
@@ -435,7 +440,7 @@ const AnalysisSection = ({ parameters, onInputChange }) => (
           <input
             type="number"
             id="timeHorizon"
-            value={parameters.timeHorizon || ''}
+            value={getDisplayValue(parameters.timeHorizon)}
             onChange={(e) => onInputChange('timeHorizon', e.target.value)}
             placeholder="30"
             min="0"
