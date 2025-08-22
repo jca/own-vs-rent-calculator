@@ -83,6 +83,36 @@ export const calculateInvestmentGrowth = (principal, monthlyContribution, annual
 };
 
 /**
+ * Calculate investment growth with variable monthly contributions
+ * @param {number} principal - Initial investment amount
+ * @param {number[]} monthlyContributions - Array of monthly investment amounts
+ * @param {number} annualRate - Annual return rate (percentage)
+ * @param {number} months - Number of months
+ * @returns {number[]} Array of investment values by month
+ */
+export const calculateInvestmentGrowthWithVariableContributions = (principal, monthlyContributions, annualRate, months) => {
+  // Safety checks
+  const safePrincipal = Number(principal) || 0;
+  const safeAnnualRate = Number(annualRate) || 0;
+  const safeMonths = Number(months) || 0;
+  
+  if (safeMonths <= 0) return [safePrincipal];
+  
+  const monthlyRate = safeAnnualRate / 12 / 100;
+  let balance = safePrincipal;
+  const values = [balance];
+  
+  for (let month = 1; month <= safeMonths; month++) {
+    // Use the contribution for this specific month (accounting for rent increases)
+    const monthlyContribution = Number(monthlyContributions[month - 1]) || 0;
+    balance = (balance + monthlyContribution) * (1 + monthlyRate);
+    values.push(balance);
+  }
+  
+  return values;
+};
+
+/**
  * Calculate home equity over time
  * @param {number} initialPrice - Initial home price
  * @param {number} appreciationRate - Annual appreciation rate (percentage)
@@ -229,13 +259,16 @@ export const calculateScenario = (params) => {
   // Rent scenario calculations - budget minus rent goes to investments
   const rentCosts = calculateRentalCosts(safeParams.monthlyRent, safeParams.rentIncreaseRate, months);
   
-  // Calculate monthly investment from budget allocation: budget minus rent
-  const rentMonthlyInvestment = Math.max(0, safeParams.monthlyBudget - safeParams.monthlyRent);
+  // Calculate monthly investment amounts that vary with rent increases
+  const rentMonthlyInvestments = rentCosts.map(monthlyRent => 
+    Math.max(0, safeParams.monthlyBudget - monthlyRent)
+  );
   
-  // Rent scenario: invest starting balance + monthly budget allocation
-  const rentInvestments = calculateInvestmentGrowth(
+  // Rent scenario: invest starting balance + variable monthly budget allocation
+  // Need to calculate investment growth with varying monthly contributions
+  const rentInvestments = calculateInvestmentGrowthWithVariableContributions(
     safeParams.investmentStartBalance, // Keep full investment balance (no down payment needed)
-    rentMonthlyInvestment, // Budget minus rent goes to investments
+    rentMonthlyInvestments, // Variable investment amounts as rent increases
     safeParams.investmentReturn,
     months
   );
@@ -280,7 +313,7 @@ export const calculateScenario = (params) => {
       investments: rentInvestments,
       totalCosts: rentCumulativeCosts,
       monthlyPayments: rentCosts,
-      monthlyInvestment: rentMonthlyInvestment
+      monthlyInvestment: rentMonthlyInvestments // Array of investment amounts that decrease as rent increases
     },
     breakEvenPoint: breakEvenPoint,
     downPaymentAmount: downPaymentAmount,
