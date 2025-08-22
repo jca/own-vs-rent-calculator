@@ -165,7 +165,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
             value={parameters.loanTerm || ''}
             onChange={(e) => onInputChange('loanTerm', e.target.value)}
             placeholder="30"
-            min="1"
+            min="0"
             max="50"
             step="1"
           />
@@ -438,7 +438,7 @@ const AnalysisSection = ({ parameters, onInputChange }) => (
             value={parameters.timeHorizon || ''}
             onChange={(e) => onInputChange('timeHorizon', e.target.value)}
             placeholder="30"
-            min="1"
+            min="0"
             max="50"
             step="1"
           />

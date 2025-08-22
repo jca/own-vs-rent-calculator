@@ -138,9 +138,9 @@ export const useCalculations = (parameters) => {
 const validateParameters = (params) => {
   const errors = {};
 
-  // Home price validation
-  if (!params.homePrice || params.homePrice <= 0) {
-    errors.homePrice = "Home price must be greater than 0";
+  // Home price validation (allow 0 for debugging)
+  if (params.homePrice < 0) {
+    errors.homePrice = "Home price cannot be negative";
   }
 
   // Down payment validation
@@ -163,9 +163,9 @@ const validateParameters = (params) => {
     errors.mortgageRate = "Mortgage rate must be between 0% and 50%";
   }
 
-  // Loan term validation
-  if (params.loanTerm < 1 || params.loanTerm > 50) {
-    errors.loanTerm = "Loan term must be between 1 and 50 years";
+  // Loan term validation (allow 0 for debugging)
+  if (params.loanTerm < 0 || params.loanTerm > 50) {
+    errors.loanTerm = "Loan term must be between 0 and 50 years";
   }
 
   // Property tax rate validation
@@ -173,9 +173,9 @@ const validateParameters = (params) => {
     errors.propertyTaxRate = "Property tax rate must be between 0% and 10%";
   }
 
-  // Monthly rent validation
-  if (!params.monthlyRent || params.monthlyRent <= 0) {
-    errors.monthlyRent = "Monthly rent must be greater than 0";
+  // Monthly rent validation (allow 0 for debugging)
+  if (params.monthlyRent < 0) {
+    errors.monthlyRent = "Monthly rent cannot be negative";
   }
 
   // Rent increase rate validation
@@ -188,9 +188,9 @@ const validateParameters = (params) => {
     errors.investmentReturn = "Investment return must be between -50% and 50%";
   }
 
-  // Time horizon validation
-  if (params.timeHorizon < 1 || params.timeHorizon > 50) {
-    errors.timeHorizon = "Time horizon must be between 1 and 50 years";
+  // Time horizon validation (allow 0 for debugging)
+  if (params.timeHorizon < 0 || params.timeHorizon > 50) {
+    errors.timeHorizon = "Time horizon must be between 0 and 50 years";
   }
 
   // Insurance and maintenance validation
