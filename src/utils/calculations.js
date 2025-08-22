@@ -229,7 +229,7 @@ export const calculateScenario = (params) => {
     investmentStartBalance: Number(investmentStartBalance) || 0,
     monthlyBudget: Number(monthlyBudget) || 0,  // Changed from monthlyInvestment
     investmentReturn: Number(investmentReturn) || 0,
-    timeHorizon: Number(timeHorizon) || 30
+    timeHorizon: timeHorizon !== undefined && timeHorizon !== null ? Number(timeHorizon) : 30
   };
 
   const months = safeParams.timeHorizon * 12;
