@@ -652,3 +652,114 @@
     color: #4dabf7;
   }
 }
+
+/* Chart Specific Styles */
+.chart-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.chart-header h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.chart-description {
+  margin: 0;
+  color: #718096;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.chart-content {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.chart-placeholder {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #718096;
+  background: #f7fafc;
+  border-radius: 8px;
+  border: 2px dashed #e2e8f0;
+}
+
+.chart-placeholder p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.chart-insights {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  border-left: 4px solid #667eea;
+}
+
+.chart-insights h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.chart-insights ul {
+  margin: 0;
+  padding-left: 1.5rem;
+  line-height: 1.6;
+}
+
+.chart-insights li {
+  margin-bottom: 0.5rem;
+  color: #4a5568;
+}
+
+.chart-insights li:last-child {
+  margin-bottom: 0;
+}
+
+.insight-box {
+  width: 100%;
+}
+
+/* Monthly Costs Chart Specific */
+.monthly-costs-tooltip {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  line-height: 1.4;
+}
+
+/* Dark mode chart styles */
+@media (prefers-color-scheme: dark) {
+  .chart-header h3 {
+    color: #e2e8f0;
+  }
+  
+  .chart-description {
+    color: #a0aec0;
+  }
+  
+  .chart-placeholder {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #a0aec0;
+  }
+  
+  .chart-insights {
+    background: #2d3748;
+    border-left-color: #667eea;
+  }
+  
+  .chart-insights h4 {
+    color: #e2e8f0;
+  }
+  
+  .chart-insights li {
+    color: #cbd5e0;
+  }
+}

@@ -32,7 +32,8 @@ export const useCalculations = (parameters) => {
         throw new Error(`Invalid parameters: ${Object.values(validationErrors.errors).join(', ')}`);
       }
 
-      return calculateScenario(parameters);
+      const result = calculateScenario(parameters);
+      return result;
     } catch (error) {
       console.error('Calculation error:', error);
       return {

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import InputForm from './components/Calculator/InputForm';
 import NetWorthChart from './components/Charts/NetWorthChart';
 import CapitalCompositionChart from './components/Charts/CapitalCompositionChart';
+import MonthlyCostsChart from './components/Charts/MonthlyCostsChart';
 import ScenarioManager from './components/ScenarioManager/ScenarioManager';
 import { defaultParameters } from './data/presetTemplates';
 import { useLocalStorage } from './hooks/useLocalStorage';
@@ -263,6 +264,7 @@ function App() {
                   
                   {chartData && (
                     <>
+                      <MonthlyCostsChart data={chartData} parameters={parameters} />
                       <NetWorthChart data={chartData} />
                       <CapitalCompositionChart data={chartData} />
                     </>

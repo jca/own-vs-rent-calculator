@@ -222,7 +222,7 @@ export const calculateScenario = (params) => {
     homeInsurance: Number(homeInsurance) || 0,
     maintenanceCost: Number(maintenanceCost) || 0,
     hoaFees: Number(hoaFees) || 0,
-    homeAppreciationRate: Number(params.homeAppreciationRate) || 3.0,
+    homeAppreciationRate: Number(params.homeAppreciationRate) || 0,
     rentalIncome: Number(params.rentalIncome) || 0,
     monthlyRent: Number(monthlyRent) || 0,
     rentIncreaseRate: Number(rentIncreaseRate) || 0,

@@ -22,6 +22,11 @@ describe('calculateMonthlyPayment', () => {
     expect(isFinite(payment)).toBe(true);
   });
 
+  test('should calculate correct payment for 0-percent mortgage', () => {
+    const payment = calculateMonthlyPayment(100000, 0, 10);
+    expect(payment).toBeCloseTo(100000/10/12, 2);
+  });
+
   test('should handle zero principal', () => {
     const payment = calculateMonthlyPayment(0, 6.5, 30);
     expect(payment).toBe(0);
@@ -53,10 +58,8 @@ describe('calculateMonthlyPayment', () => {
 
 describe('calculateRemainingBalance', () => {
   test('should calculate correct remaining balance', () => {
-    const balance = calculateRemainingBalance(400000, 6.5, 30, 60);
-    expect(balance).toBeGreaterThan(0);
-    expect(balance).toBeLessThan(400000);
-    expect(isFinite(balance)).toBe(true);
+    const balance = calculateRemainingBalance(400000, 6.5, 30, 12);
+    expect(balance).toBeCloseTo(395529.10, 2);
   });
 
   test('should return zero when loan is paid off', () => {
