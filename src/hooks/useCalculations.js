@@ -32,8 +32,7 @@ export const useCalculations = (parameters) => {
         throw new Error(`Invalid parameters: ${Object.values(validationErrors.errors).join(', ')}`);
       }
 
-      const result = calculateScenario(parameters);
-      return result;
+      return calculateScenario(parameters);
     } catch (error) {
       console.error('Calculation error:', error);
       return {
@@ -149,13 +148,20 @@ const validateParameters = (params) => {
     errors.downPayment = "Down payment must be between 0% and 100%";
   }
 
-  // Validate down payment amount against starting investment balance
+  // Initial buying costs validation
+  if (params.initialBuyingCosts && params.initialBuyingCosts < 0) {
+    errors.initialBuyingCosts = "Initial buying costs cannot be negative";
+  }
+
+  // Validate total initial costs (down payment + buying costs) against starting investment balance
   if (params.homePrice && params.downPayment && params.investmentStartBalance !== undefined) {
     const downPaymentAmount = (params.downPayment / 100) * params.homePrice;
+    const initialBuyingCosts = Number(params.initialBuyingCosts) || 0;
+    const totalInitialCosts = downPaymentAmount + initialBuyingCosts;
     const startingBalance = Number(params.investmentStartBalance) || 0;
     
-    if (downPaymentAmount > startingBalance) {
-      errors.downPayment = `Down payment ($${downPaymentAmount.toLocaleString()}) exceeds available investment balance ($${startingBalance.toLocaleString()}) for ownership scenario`;
+    if (totalInitialCosts > startingBalance) {
+      errors.downPayment = `Total initial costs ($${totalInitialCosts.toLocaleString()}) exceed available investment balance ($${startingBalance.toLocaleString()}) for ownership scenario`;
     }
   }
 

@@ -10,6 +10,7 @@ export const presetTemplates = {
     parameters: {
       homePrice: 400000,
       downPayment: 10,
+      initialBuyingCosts: 8000, // Closing costs, inspection, appraisal, legal fees, etc.
       mortgageRate: 7.0,
       loanTerm: 30,
       propertyTaxRate: 1.2,
@@ -34,6 +35,7 @@ export const presetTemplates = {
     parameters: {
       homePrice: 800000,
       downPayment: 20,
+      initialBuyingCosts: 15000, // Higher closing costs for expensive home
       mortgageRate: 6.5,
       loanTerm: 30,
       propertyTaxRate: 1.5,
@@ -58,6 +60,7 @@ export const presetTemplates = {
     parameters: {
       homePrice: 500000,
       downPayment: 20,
+      initialBuyingCosts: 10000, // Closing costs, inspection, appraisal, legal fees
       mortgageRate: 6.0,
       loanTerm: 15,
       propertyTaxRate: 1.0,
@@ -82,6 +85,7 @@ export const presetTemplates = {
     parameters: {
       homePrice: 300000,
       downPayment: 5,
+      initialBuyingCosts: 6000, // Lower costs for smaller home
       mortgageRate: 7.5,
       loanTerm: 30,
       propertyTaxRate: 1.1,
@@ -106,6 +110,7 @@ export const presetTemplates = {
     parameters: {
       homePrice: 600000,
       downPayment: 15,
+      initialBuyingCosts: 12000, // Family-sized home buying costs
       mortgageRate: 6.8,
       loanTerm: 30,
       propertyTaxRate: 1.3,
@@ -148,6 +153,7 @@ export const getPresetTemplate = (id) => {
 export const defaultParameters = {
   homePrice: 500000,
   downPayment: 20,
+  initialBuyingCosts: 10000, // Closing costs, inspection, appraisal, legal fees, moving costs
   mortgageRate: 6.5,
   loanTerm: 30,
   propertyTaxRate: 1.2,

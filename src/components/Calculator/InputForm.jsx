@@ -122,7 +122,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
             onChange={(e) => onInputChange('homePrice', e.target.value)}
             placeholder="500,000"
             min="0"
-            step="1000"
+            step="10000"
           />
         </div>
       </div>
@@ -138,10 +138,27 @@ const PropertySection = ({ parameters, onInputChange }) => (
             placeholder="20"
             min="0"
             max="100"
-            step="0.1"
+            step="1"
           />
           <span className="input-suffix">%</span>
         </div>
+      </div>
+
+      <div className="input-group">
+        <label htmlFor="initialBuyingCosts">Initial Buying Costs</label>
+        <div className="input-wrapper">
+          <span className="input-prefix">$</span>
+          <input
+            type="number"
+            id="initialBuyingCosts"
+            value={getDisplayValue(parameters.initialBuyingCosts)}
+            onChange={(e) => onInputChange('initialBuyingCosts', e.target.value)}
+            placeholder="10,000"
+            min="0"
+            step="500"
+          />
+        </div>
+        <small className="input-help">Closing costs, inspection, appraisal, legal fees, moving costs</small>
       </div>
 
       <div className="input-group">
@@ -155,7 +172,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
             placeholder="6.5"
             min="0"
             max="50"
-            step="0.01"
+            step="0.1"
           />
           <span className="input-suffix">%</span>
         </div>
@@ -189,7 +206,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
             placeholder="1.2"
             min="0"
             max="10"
-            step="0.01"
+            step="0.1"
           />
           <span className="input-suffix">%</span>
         </div>
@@ -223,7 +240,7 @@ const PropertySection = ({ parameters, onInputChange }) => (
             onChange={(e) => onInputChange('maintenanceCost', e.target.value)}
             placeholder="5,000"
             min="0"
-            step="100"
+            step="500"
           />
           <span className="input-suffix">/year</span>
         </div>
@@ -357,7 +374,7 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
             onChange={(e) => onInputChange('investmentStartBalance', e.target.value)}
             placeholder="10,000"
             min="0"
-            step="1000"
+            step="10000"
           />
         </div>
         <small className="input-help">Money you already have available to invest</small>
@@ -374,7 +391,7 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
             onChange={(e) => onInputChange('monthlyBudget', e.target.value)}
             placeholder="3000"
             min="0"
-            step="50"
+            step="100"
           />
           <span className="input-suffix">/month</span>
         </div>
@@ -392,7 +409,7 @@ const InvestmentSection = ({ parameters, onInputChange }) => (
             placeholder="7.0"
             min="-50"
             max="50"
-            step="0.1"
+            step="0.5"
           />
           <span className="input-suffix">%</span>
         </div>

@@ -198,6 +198,7 @@ export const calculateScenario = (params) => {
   const {
     homePrice = 0,
     downPayment = 0,
+    initialBuyingCosts = 0,
     mortgageRate = 0,
     loanTerm = 30,
     propertyTaxRate = 0,
@@ -216,6 +217,7 @@ export const calculateScenario = (params) => {
   const safeParams = {
     homePrice: Number(homePrice) || 0,
     downPayment: Number(downPayment) || 0,
+    initialBuyingCosts: Number(initialBuyingCosts) || 0,
     mortgageRate: Number(mortgageRate) || 0,
     loanTerm: Number(loanTerm) || 30,
     propertyTaxRate: Number(propertyTaxRate) || 0,
@@ -234,6 +236,7 @@ export const calculateScenario = (params) => {
 
   const months = safeParams.timeHorizon * 12;
   const downPaymentAmount = (safeParams.downPayment / 100) * safeParams.homePrice;
+  const totalInitialCosts = downPaymentAmount + safeParams.initialBuyingCosts;
   const loanAmount = safeParams.homePrice - downPaymentAmount;
   const monthlyMortgagePayment = calculateMonthlyPayment(loanAmount, safeParams.mortgageRate, safeParams.loanTerm);
   const monthlyHousingCost = calculateMonthlyHousingCost(
@@ -259,10 +262,10 @@ export const calculateScenario = (params) => {
   );
 
   // For own scenario, rental income can be invested monthly
-  // Down payment is deducted from starting investment balance
+  // Down payment and initial buying costs are deducted from starting investment balance
   // Monthly budget minus housing costs plus rental income goes to investments
   const ownMonthlyInvestment = Math.max(0, safeParams.monthlyBudget - monthlyHousingCost + safeParams.rentalIncome);
-  const ownStartingInvestmentBalance = Math.max(0, safeParams.investmentStartBalance - downPaymentAmount);
+  const ownStartingInvestmentBalance = Math.max(0, safeParams.investmentStartBalance - totalInitialCosts);
   const ownInvestments = calculateInvestmentGrowth(
     ownStartingInvestmentBalance,
     ownMonthlyInvestment,
@@ -333,6 +336,8 @@ export const calculateScenario = (params) => {
     },
     breakEvenPoint: breakEvenPoint,
     downPaymentAmount: downPaymentAmount,
+    initialBuyingCosts: safeParams.initialBuyingCosts,
+    totalInitialCosts: totalInitialCosts,
     ownStartingInvestmentBalance: ownStartingInvestmentBalance,
     monthlyMortgagePayment: monthlyMortgagePayment,
     monthlyHousingCost: monthlyHousingCost,

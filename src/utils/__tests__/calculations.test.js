@@ -344,4 +344,34 @@ describe('calculateScenario - Integration Tests', () => {
       expect(isFinite(result.breakEvenPoint)).toBe(true);
     }
   });
+
+  test('should handle initial buying costs correctly', () => {
+    const paramsWithBuyingCosts = {
+      ...basicParams,
+      initialBuyingCosts: 10000
+    };
+    
+    const resultWithCosts = calculateScenario(paramsWithBuyingCosts);
+    const resultWithoutCosts = calculateScenario(basicParams);
+    
+    // Should include initial buying costs in calculations
+    expect(resultWithCosts.initialBuyingCosts).toBe(10000);
+    expect(resultWithCosts.totalInitialCosts).toBe(resultWithCosts.downPaymentAmount + 10000);
+    
+    // Own scenario starting investment balance should be reduced by total initial costs
+    expect(resultWithCosts.ownStartingInvestmentBalance).toBe(
+      Math.max(0, basicParams.investmentStartBalance - resultWithCosts.totalInitialCosts)
+    );
+    
+    // Should result in lower starting investment balance compared to no buying costs
+    expect(resultWithCosts.ownStartingInvestmentBalance).toBeLessThan(
+      resultWithoutCosts.ownStartingInvestmentBalance
+    );
+    
+    // All values should be finite and non-negative
+    expect(isFinite(resultWithCosts.initialBuyingCosts)).toBe(true);
+    expect(isFinite(resultWithCosts.totalInitialCosts)).toBe(true);
+    expect(resultWithCosts.initialBuyingCosts).toBeGreaterThanOrEqual(0);
+    expect(resultWithCosts.totalInitialCosts).toBeGreaterThanOrEqual(0);
+  });
 });
